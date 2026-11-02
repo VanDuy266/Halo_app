@@ -40,7 +40,9 @@ TSharedRef<SWidget> UVincentUI::RebuildWidget(){
  UVerticalBox* Content=WidgetTree->ConstructWidget<UVerticalBox>();Width->SetContent(Content);
  Heading=Text(TEXT("VINCENT D"),24);Content->AddChildToVerticalBox(Heading)->SetPadding(FMargin(0,0,0,16));
  Body=Text(TEXT(""),16);Content->AddChildToVerticalBox(Body)->SetPadding(FMargin(0,0,0,20));
- Answer=WidgetTree->ConstructWidget<UEditableTextBox>();Answer->SetHintText(FText::FromString(TEXT("Nhập theo thông tin trong cuộc trò chuyện")));Content->AddChildToVerticalBox(Answer)->SetPadding(FMargin(0,0,0,12));Answer->SetFont(FCoreStyle::GetDefaultFontStyle(TEXT("Regular"),18));
+ Answer=WidgetTree->ConstructWidget<UEditableTextBox>();
+ Answer->SetHintText(FText::FromString(TEXT("Nhập theo thông tin trong cuộc trò chuyện")));
+ Content->AddChildToVerticalBox(Answer)->SetPadding(FMargin(0,0,0,12));
  Feedback=Text(TEXT(""),16);Content->AddChildToVerticalBox(Feedback);
  auto Button=[this,Content,Text](const FString& Label)->UButton*{auto* B=WidgetTree->ConstructWidget<UButton>();FButtonStyle Style=B->GetStyle();Style.Normal=FSlateRoundedBoxBrush(FLinearColor(.10f,.13f,.15f),5.f);Style.Hovered=FSlateRoundedBoxBrush(FLinearColor(.18f,.22f,.24f),5.f);Style.Pressed=FSlateRoundedBoxBrush(FLinearColor(.06f,.09f,.11f),5.f);B->SetStyle(Style);if(auto* Slot=Cast<UButtonSlot>(B->AddChild(Text(Label,15))))Slot->SetPadding(FMargin(18,11));Content->AddChildToVerticalBox(B)->SetPadding(FMargin(0,3));return B;};
  SubmitButton=Button(TEXT("Xác nhận công việc"));SubmitButton->OnClicked.AddDynamic(this,&UVincentUI::Submit);

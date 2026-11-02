@@ -1,6 +1,7 @@
 #include "VincentGame.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "Components/TextBlock.h"
 #include "Components/PointLightComponent.h"
 #include "Engine/PointLight.h"
 #include "Engine/DirectionalLight.h"
@@ -25,7 +26,10 @@ void AVincentGameMode::BeginPlay(){
  GetWorldTimerManager().SetTimerForNextTick(FTimerDelegate::CreateWeakLambda(this,[this](){
   if(auto* PC=UGameplayStatics::GetPlayerController(this,0)){
    UI=CreateWidget<UVincentUI>(PC,UVincentUI::StaticClass());if(UI){UI->AddToViewport();Refresh();UI->StartIntro(OpeningText());}
-   if(auto* P=PC->GetPawn()){P->SetActorLocation(FVector(0,0,110),false,nullptr,ETeleportType::TeleportPhysics);PC->SetControlRotation(FRotator(0,90,0));}
+   if(AVincentPawn* P=Cast<AVincentPawn>(PC->GetPawn())){
+    P->SetActorLocation(FVector(0,0,110),false,nullptr,ETeleportType::TeleportPhysics);
+    PC->SetControlRotation(FRotator(0,90,0));
+   }
   }
  }));
  GetWorldTimerManager().SetTimer(LifeClockTimer,this,&AVincentGameMode::TickLifeClock,1.f,true);
@@ -64,7 +68,16 @@ void AVincentGameMode::BuildNeighborhood(){
  Box(FVector(200,-180,84),FVector(.26,.19,.025),"notebook",2);Box(FVector(260,-180,86),FVector(.28,.15,.045),"home",3);
  Label(FVector(0,337,245),TEXT("PHÒNG CỦA DUY / 21 TUỔI"),17);
  PlantActor=Box(FVector(315,-260,72),FVector(.25,.25,.35),NAME_None,2);if(PlantActor){PlantActor->SetActorHiddenInGame(!Progress.OwnsPlant);PlantActor->SetActorEnableCollision(Progress.OwnsPlant);}
- auto Light=[this](FVector P){auto* L=GetWorld()->SpawnActor<APointLight>(P,FRotator::ZeroRotator);if(L){L->GetPointLightComponent()->SetIntensity(16000);L->GetPointLightComponent()->SetAttenuationRadius(1000);L->GetPointLightComponent()->SetLightColor(FLinearColor(1,.89f,.73f));RoomActors.Add(L);}};
+ auto Light=[this](FVector P){
+  APointLight* L=GetWorld()->SpawnActor<APointLight>(P,FRotator::ZeroRotator);
+  if(!L)return;
+  if(UPointLightComponent* Component=L->FindComponentByClass<UPointLightComponent>()){
+   Component->SetIntensity(16000);
+   Component->SetAttenuationRadius(1000);
+   Component->SetLightColor(FLinearColor(1,.89f,.73f));
+  }
+  RoomActors.Add(L);
+ };
  Light(FVector(0,0,275));
  auto* Sun=GetWorld()->SpawnActor<ADirectionalLight>(FVector(0,0,1000),FRotator(-40,-35,0));if(Sun){Sun->GetLightComponent()->SetMobility(EComponentMobility::Movable);Sun->GetLightComponent()->SetIntensity(3);RoomActors.Add(Sun);}
  auto* Sky=GetWorld()->SpawnActor<ASkyLight>();if(Sky){Sky->GetLightComponent()->SetMobility(EComponentMobility::Movable);Sky->GetLightComponent()->SetIntensity(1);Sky->GetLightComponent()->SetLowerHemisphereColor(FLinearColor(.3f,.32f,.35f));RoomActors.Add(Sky);}
