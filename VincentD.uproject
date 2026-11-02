@@ -1,0 +1,18 @@
+{
+  "FileVersion": 3,
+  "EngineAssociation": "",
+  "Category": "Games",
+  "Description": "Vincent D: Cung Nhau Bo Tron - first-person puzzle prototype",
+  "Modules": [
+    {
+      "Name": "VincentD",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    },
+    {
+      "Name": "VincentDTools",
+      "Type": "Editor",
+      "LoadingPhase": "Default"
+    }
+  ]
+}
