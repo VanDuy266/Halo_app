@@ -14,6 +14,7 @@
 #include "Components/TextBlock.h"
 #include "Components/EditableTextBox.h"
 #include "Components/Button.h"
+#include "Components/ButtonSlot.h"
 #include "Components/SizeBox.h"
 #include "Components/VerticalBoxSlot.h"
 #include "Styling/CoreStyle.h"
@@ -41,7 +42,7 @@ TSharedRef<SWidget> UVincentUI::RebuildWidget(){
  Body=Text(TEXT(""),16);Content->AddChildToVerticalBox(Body)->SetPadding(FMargin(0,0,0,20));
  Answer=WidgetTree->ConstructWidget<UEditableTextBox>();Answer->SetHintText(FText::FromString(TEXT("Nhập đáp án rồi bấm Kiểm tra")));Content->AddChildToVerticalBox(Answer)->SetPadding(FMargin(0,0,0,12));Answer->SetFont(FCoreStyle::GetDefaultFontStyle(TEXT("Regular"),18));
  Feedback=Text(TEXT(""),16);Content->AddChildToVerticalBox(Feedback);
- auto Button=[this,Content,Text](const FString& Label)->UButton*{auto* B=WidgetTree->ConstructWidget<UButton>();FButtonStyle Style=B->GetStyle();Style.Normal=FSlateRoundedBoxBrush(FLinearColor(.10f,.13f,.15f),5.f);Style.Hovered=FSlateRoundedBoxBrush(FLinearColor(.18f,.22f,.24f),5.f);Style.Pressed=FSlateRoundedBoxBrush(FLinearColor(.06f,.09f,.11f),5.f);B->SetStyle(Style);B->SetContentPadding(FMargin(18,11));B->AddChild(Text(Label,15));Content->AddChildToVerticalBox(B)->SetPadding(FMargin(0,3));return B;};
+ auto Button=[this,Content,Text](const FString& Label)->UButton*{auto* B=WidgetTree->ConstructWidget<UButton>();FButtonStyle Style=B->GetStyle();Style.Normal=FSlateRoundedBoxBrush(FLinearColor(.10f,.13f,.15f),5.f);Style.Hovered=FSlateRoundedBoxBrush(FLinearColor(.18f,.22f,.24f),5.f);Style.Pressed=FSlateRoundedBoxBrush(FLinearColor(.06f,.09f,.11f),5.f);B->SetStyle(Style);if(auto* Slot=Cast<UButtonSlot>(B->AddChild(Text(Label,15))))Slot->SetPadding(FMargin(18,11));Content->AddChildToVerticalBox(B)->SetPadding(FMargin(0,3));return B;};
  SubmitButton=Button(TEXT("Kiểm tra đáp án / mật mã"));SubmitButton->OnClicked.AddDynamic(this,&UVincentUI::Submit);
  ContinueButton=Button(TEXT("Tiếp tục / trở về khám phá"));ContinueButton->OnClicked.AddDynamic(this,&UVincentUI::Continue);
  AnButton=Button(TEXT("Mang ý thức của An ra ngoài"));AnButton->OnClicked.AddDynamic(this,&UVincentUI::SaveAn);
@@ -59,7 +60,7 @@ TSharedRef<SWidget> UVincentUI::RebuildWidget(){
  auto* ImageScale=WidgetTree->ConstructWidget<UScaleBox>();ImageScale->SetStretch(EStretch::ScaleToFit);ImageSize->SetContent(ImageScale);IntroImage=WidgetTree->ConstructWidget<UImage>();ImageScale->AddChild(IntroImage);
  IntroTitle=Text(TEXT("UNREAL ENGINE"),32);IntroTitle->SetJustification(ETextJustify::Center);IntroBox->AddChildToVerticalBox(IntroTitle)->SetPadding(FMargin(0,18));
  IntroMenu=WidgetTree->ConstructWidget<UVerticalBox>();IntroBox->AddChildToVerticalBox(IntroMenu);
- auto* Play=WidgetTree->ConstructWidget<UButton>();Play->SetContentPadding(FMargin(24,14));Play->AddChild(Text(TEXT("Vào game"),20));IntroMenu->AddChildToVerticalBox(Play)->SetPadding(FMargin(100,10));Play->OnClicked.AddDynamic(this,&UVincentUI::PlayGame);
+ auto* Play=WidgetTree->ConstructWidget<UButton>();if(auto* PlaySlot=Cast<UButtonSlot>(Play->AddChild(Text(TEXT("Vào game"),20))))PlaySlot->SetPadding(FMargin(24,14));IntroMenu->AddChildToVerticalBox(Play)->SetPadding(FMargin(100,10));Play->OnClicked.AddDynamic(this,&UVincentUI::PlayGame);
  auto* Skip=WidgetTree->ConstructWidget<UButton>();Skip->AddChild(Text(TEXT("Bỏ qua giới thiệu"),13));auto* SkipSlot=IntroCanvas->AddChildToCanvas(Skip);SkipSlot->SetAnchors(FAnchors(1,1));SkipSlot->SetAlignment(FVector2D(1,1));SkipSlot->SetPosition(FVector2D(-30,-25));SkipSlot->SetAutoSize(true);Skip->OnClicked.AddDynamic(this,&UVincentUI::MainMenu);
  IntroOverlay->SetVisibility(ESlateVisibility::Collapsed);
  return Super::RebuildWidget();

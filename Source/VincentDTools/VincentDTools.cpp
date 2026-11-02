@@ -4,6 +4,7 @@
 #include "Misc/Paths.h"
 #include "Misc/PackageName.h"
 #include "AssetToolsModule.h"
+#include "IAssetTools.h"
 #include "AssetImportTask.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Factories/MaterialFactoryNew.h"

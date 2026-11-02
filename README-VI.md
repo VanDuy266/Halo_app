@@ -1,5 +1,7 @@
 # Vincent D: Cùng Nhau Bỏ Trốn — Unreal C++
 
+> **Hướng nội dung mới:** xem `Design/USER-VISION.md` và `Design/LIFE-VIET-DESIGN.md` cho game mô phỏng cuộc sống của Duy, 21 tuổi. Source runtime bên dưới vẫn là prototype thoát phòng trước đó; các tính năng life simulator chưa được triển khai và kiểm chứng.
+
 ## Bản chính đã chuyển sang C++
 
 Gameplay không chạy bằng Python, JavaScript hoặc C#. Module `VincentD` chứa nhân vật góc nhìn thứ nhất, tương tác, câu đố, lưu game, giao diện UMG và intro. Module `VincentDTools` là công cụ C++ chỉ dành cho Unreal Editor để nhập vật liệu/logo và mesh vát cạnh. Không cần plugin Python.
@@ -19,7 +21,7 @@ Một số model công khai ở `SourceAssets/Models` và `SourceAssets/Lab` đ�
 
 ## Cài trên Windows
 
-1. Cài Unreal Engine 5 qua Epic Games Launcher. Chọn phiên bản đã cài khi mở `.uproject`; chưa xác minh tương thích với phiên bản cụ thể trên máy bạn.
+1. Cài Unreal Engine 5 qua Epic Games Launcher. Bản Target hiện cấu hình cho Unreal Engine 5.8 theo log build người dùng cung cấp; chưa xác minh chạy thực tế.
 2. Cài Visual Studio 2022 với **Game development with C++**, MSVC v143 và Windows SDK. Nếu engine yêu cầu toolset khác, cài đúng phiên bản được thông báo trong Visual Studio Installer, không tắt kiểm tra toolchain.
 3. Giải nén toàn bộ dự án vào đường dẫn ngắn, ví dụ `C:\Games\VincentD-Unreal`.
 4. Chuột phải `VincentD.uproject` → Switch Unreal Engine version → chọn engine. Generate Visual Studio project files.
@@ -65,3 +67,9 @@ Thay đường dẫn ví dụ bằng thư mục engine thực tế. Script kiể
 Kết quả dự kiến nằm trong `Packaged`. Kiểm tra `VincentD.exe` ở đó cùng toàn bộ dữ liệu đi kèm. Chưa có `.exe` nào được tạo trong môi trường này.
 
 Muốn cho người khác tải chơi: ZIP **toàn bộ thư mục đầu ra**, không chỉ `.exe`, rồi tải lên itch.io hoặc GitHub Releases. Người chơi không cần cài Unreal Engine. Link công khai chỉ tạo được sau khi có bản Windows đã build và thử thành công.
+
+## Sửa lỗi shared build environment trên UE 5.8
+
+Log người dùng cho biết Win64 buildable và có Windows SDK 10.0.26100.0. Lỗi dừng hiện tại là Target dùng BuildSettings V4, khiến các warning setting khác mặc định UnrealEditor. Hai Target đã đổi sang BuildSettingsVersion.V7 và EngineIncludeOrderVersion.Unreal5_8 đúng theo log gợi ý. Không dùng bOverrideBuildEnvironment hoặc Unique để bỏ qua kiểm tra. Đồng thời sửa padding UMG qua UButtonSlot để tránh gọi API không tồn tại trên UButton.
+
+Đóng Unreal/Visual Studio, cập nhật các file source mới, xóa thư mục generated `Binaries` và `Intermediate` **chỉ trong thư mục dự án** rồi mở lại `.uproject` để build. Giữ `Source`, `Content`, `Config` và `SourceAssets`. Nếu lỗi tiếp, gửi Log.txt mới trong `%LOCALAPPDATA%\UnrealBuildTool`. Đây mới là sửa nguyên nhân được xác nhận từ log; chưa xác nhận toàn bộ dự án biên dịch thành công.
