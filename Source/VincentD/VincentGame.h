@@ -5,6 +5,7 @@
 #include "GameFramework/SaveGame.h"
 #include "Blueprint/UserWidget.h"
 #include "TimerManager.h"
+#include "LifeProgression.h"
 #include "VincentGame.generated.h"
 
 class AVincentGameMode;
@@ -19,24 +20,26 @@ class UImage;
 class UTexture2D;
 class UMaterialInterface;
 
-struct FVincentPuzzle {
- FString Name, Question, Answer, Digit, Result, Hint;
-};
-struct FVincentChapter {
- FString Name, Intro, Radio, Reveal, Board, Note;
- FLinearColor Color;
- int32 Hour=4;
- TArray<FVincentPuzzle> Puzzles;
-};
-
 UCLASS()
 class VINCENTD_API UVincentSave : public USaveGame {
  GENERATED_BODY()
 public:
- UPROPERTY(SaveGame) int32 Chapter=0;
- UPROPERTY(SaveGame) int32 Solved=0;
- UPROPERTY(SaveGame) bool Open=false;
- UPROPERTY(SaveGame) int32 Ending=0;
+ UPROPERTY(SaveGame) int32 SchemaVersion=1;
+ UPROPERTY(SaveGame) int64 Money=250000;
+ UPROPERTY(SaveGame) int32 Day=1;
+ UPROPERTY(SaveGame) int32 Minute=420;
+ UPROPERTY(SaveGame) int32 Energy=80;
+ UPROPERTY(SaveGame) int32 Hunger=75;
+ UPROPERTY(SaveGame) int32 Stage=0;
+ UPROPERTY(SaveGame) int32 Route=0;
+ UPROPERTY(SaveGame) int32 MotherTrust=0;
+ UPROPERTY(SaveGame) int32 MechanicTrust=0;
+ UPROPERTY(SaveGame) int32 FriendTrust=0;
+ UPROPERTY(SaveGame) int32 LastExtraShiftDay=0;
+ UPROPERTY(SaveGame) bool BikeReady=false;
+ UPROPERTY(SaveGame) bool HasParcel=false;
+ UPROPERTY(SaveGame) bool FoundNotebook=false;
+ UPROPERTY(SaveGame) bool OwnsPlant=false;
 };
 
 UCLASS()
@@ -78,8 +81,8 @@ private:
  UPROPERTY() UEditableTextBox* Answer;
  UPROPERTY() UButton* SubmitButton;
  UPROPERTY() UButton* ContinueButton;
- UPROPERTY() UButton* AnButton;
- UPROPERTY() UButton* TruthButton;
+ UPROPERTY() UButton* VillageButton;
+ UPROPERTY() UButton* CityButton;
  UPROPERTY() UBorder* Dialog;
  UPROPERTY() UBorder* IntroOverlay;
  UPROPERTY() UImage* IntroImage;
@@ -97,11 +100,11 @@ private:
  bool bDialog=false;
  UFUNCTION() void Submit();
  UFUNCTION() void Continue();
- UFUNCTION() void Radio();
+ UFUNCTION() void Phone();
  UFUNCTION() void Hint();
  UFUNCTION() void Restart();
- UFUNCTION() void SaveAn();
- UFUNCTION() void SaveTruth();
+ UFUNCTION() void StayVillage();
+ UFUNCTION() void VisitCity();
  void Close();
  AVincentGameMode* Game() const;
 };
@@ -115,16 +118,14 @@ public:
  void Inspect(FName Key);
  void Submit(const FString& Answer);
  void Continue();
- void Radio();
+ void Phone();
  void Hint();
  void Restart();
- void Finish(int32 Choice);
+ void ChoosePath(int32 Choice);
  void SetPrompt(const FString& Value);
+ FString InteractionName(FName Key) const;
  bool InDialog() const;
- int32 Chapter=0;
- int32 Solved=0;
- bool DoorOpen=false;
- int32 Ending=0;
+
 private:
  UPROPERTY() UVincentUI* UI;
  UPROPERTY() UStaticMesh* Cube;
@@ -132,18 +133,21 @@ private:
  UPROPERTY() UStaticMesh* DetailCube;
  UPROPERTY() TArray<UMaterialInterface*> Surfaces;
  UPROPERTY() TArray<AActor*> RoomActors;
- UPROPERTY() AActor* DoorActor;
- TArray<FVincentChapter> Chapters;
- int32 Active=-1;
- bool bDoorInput=false;
- bool bAdvance=false;
+ UPROPERTY() AActor* PlantActor;
+ VincentLife::State Progress;
+ FName Active;
  bool bRestartConfirm=false;
- int32 HintIndex=0;
- void BuildRoom();
+ int32 ClockTicks=0;
+ FTimerHandle LifeClockTimer;
+ void TickLifeClock();
+ void BuildNeighborhood();
  void LoadVisuals();
  void Save();
+ void Load();
  void Refresh();
- void LoadStory();
+ void ShowOutcome(VincentLife::Result Result,const FString& SuccessText);
+ FString OpeningText() const;
+ FString ObjectiveText() const;
  AActor* Box(FVector Location,FVector Scale,FName Key=NAME_None,int32 MaterialIndex=-1);
  void Label(FVector Location,const FString& Value,float Size=22,FName Key=NAME_None);
 };

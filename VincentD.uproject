@@ -1,8 +1,8 @@
 {
   "FileVersion": 3,
-  "EngineAssociation": "",
+  "EngineAssociation": "5.8",
   "Category": "Games",
-  "Description": "Vincent D: Cung Nhau Bo Tron - first-person puzzle prototype",
+  "Description": "Vincent D - Tu Xom Nho Den Thanh Pho Lon - C++ gameplay prototype",
   "Modules": [
     {
       "Name": "VincentD",

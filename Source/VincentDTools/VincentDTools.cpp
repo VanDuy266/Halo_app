@@ -61,7 +61,7 @@ class FVincentDToolsModule : public IModuleInterface {
    auto* Factory=NewObject<UFbxFactory>();Factory->ImportUI->bImportAsSkeletal=false;Factory->ImportUI->bImportMaterials=false;Factory->ImportUI->bImportTextures=false;Factory->ImportUI->MeshTypeToImport=FBXIT_StaticMesh;Factory->ImportUI->StaticMeshImportData->bCombineMeshes=true;
    Import(FPaths::ProjectDir()/TEXT("SourceAssets/Meshes/SM_BevelCube.obj"),TEXT("/Game/Vincent/Meshes"),TEXT("SM_BevelCube"),Factory);
   }
-  Branding(TEXT("GameLogo"));Branding(TEXT("StudioLogo"));Branding(TEXT("UnrealEngineLogo"));
+  Branding(TEXT("StudioLogo"));Branding(TEXT("UnrealEngineLogo"));
   UE_LOG(LogVincentTools,Display,TEXT("Vincent asset preparation finished. Inspect errors above, Save All, then test Standalone Game before packaging. Existing assets were preserved."));
  }
 public:

@@ -36,9 +36,9 @@ void AVincentPawn::Tick(float Dt){
  const FVector Start=Camera->GetComponentLocation();
  Target=NAME_None;
  if(GetWorld()->LineTraceSingleByChannel(Hit,Start,Start+Camera->GetForwardVector()*330,ECC_Visibility,Params)&&Hit.GetActor()) {
-  for(FName Tag:Hit.GetActor()->Tags)if(Tag=="painting"||Tag=="clock"||Tag=="desk"||Tag=="door"||Tag=="radio"){Target=Tag;break;}
+  for(FName Tag:Hit.GetActor()->Tags)if(Tag=="home"||Tag=="bed"||Tag=="notebook"||Tag=="cafe"||Tag=="scooter"||Tag=="customer"||Tag=="bus"||Tag=="food"||Tag=="decor"){Target=Tag;break;}
  }
- G->SetPrompt(Target.IsNone()?TEXT(""):FString::Printf(TEXT("[E] Khám phá: %s"),*Target.ToString()));
+ G->SetPrompt(Target.IsNone()?TEXT(""):FString::Printf(TEXT("[E] Khám phá: %s"),*G->InteractionName(Target)));
 }
 void AVincentPawn::Interact(){auto* G=Cast<AVincentGameMode>(UGameplayStatics::GetGameMode(this));if(G&&!G->InDialog()&&!Target.IsNone())G->Inspect(Target);}
-void AVincentPawn::Menu(){auto* G=Cast<AVincentGameMode>(UGameplayStatics::GetGameMode(this));if(G&&!G->InDialog())G->Radio();}
+void AVincentPawn::Menu(){auto* G=Cast<AVincentGameMode>(UGameplayStatics::GetGameMode(this));if(G&&!G->InDialog())G->Phone();}

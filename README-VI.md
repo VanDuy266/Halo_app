@@ -1,75 +1,70 @@
-# Vincent D: Cùng Nhau Bỏ Trốn — Unreal C++
+# Vincent D — Từ Xóm Nhỏ Đến Thành Phố Lớn
 
-> **Hướng nội dung mới:** xem `Design/USER-VISION.md` và `Design/LIFE-VIET-DESIGN.md` cho game mô phỏng cuộc sống của Duy, 21 tuổi. Source runtime bên dưới vẫn là prototype thoát phòng trước đó; các tính năng life simulator chưa được triển khai và kiểm chứng.
+Studio: VINCENT D STUDIO. Nhân vật chính: Duy, 21 tuổi. Bản source 0.2 chuyển vòng chơi từ thoát phòng sang mô phỏng cuộc sống Việt Nam.
 
-## Bản chính đã chuyển sang C++
+## Đã triển khai trong source C++
 
-Gameplay không chạy bằng Python, JavaScript hoặc C#. Module `VincentD` chứa nhân vật góc nhìn thứ nhất, tương tác, câu đố, lưu game, giao diện UMG và intro. Module `VincentDTools` là công cụ C++ chỉ dành cho Unreal Editor để nhập vật liệu/logo và mesh vát cạnh. Không cần plugin Python.
+- Góc nhìn thứ nhất, di chuyển/nhìn và tương tác bằng E; giao diện nằm trong cửa sổ game.
+- Intro Unreal → Vincent D Studio → menu. Title của game dùng chữ mới; logo game thoát phòng cũ không được sử dụng.
+- Luồng ngày đầu: xem phòng → phụ quán mẹ → chẩn đoán/sửa xe → giao kiện D-03 tại nhà số 17 → chọn ở xóm hoặc hẹn lên Hải Minh.
+- Tiền công, ca làm thêm một lần mỗi ngày để có đường kiếm lại tiền, chi phí sửa, kiểm tra điều kiện nhiệm vụ, thể lực/mức no, ăn/ngủ, mua một chậu cây, mức tin cậy với ba nhân vật và manh mối quyển sổ.
+- Điện thoại/nhật ký trong menu; thời gian dừng khi đang đọc giao diện.
+- SaveGame riêng `VincentLife_v1`; không đọc hoặc xóa save thoát phòng cũ.
+- EngineAssociation 5.8, Target BuildSettings V7 / Unreal5_8 theo log máy người dùng. Sửa UMG padding qua UButtonSlot.
 
-**Trạng thái kiểm chứng:** môi trường tạo source không có Unreal Engine, Windows SDK hoặc trình biên dịch Unreal. Chưa chạy Unreal Header Tool, chưa biên dịch C++, chưa mở Editor và chưa xuất `.exe`. Kiểm tra cấu trúc source không thay thế kiểm tra build. Bản web đã thử ở trình duyệt là một bản thử riêng, không phải bằng chứng bản Unreal đã chạy.
+## Kiểm chứng và giới hạn
 
-## Nội dung trong source
+Phần luật độc lập ở `LifeProgression.h` đã được biên dịch bằng g++ và chạy kiểm thử trong `Tests/LifeProgressionTests.cpp`: thứ tự nhiệm vụ, đáp án sai, nhận thưởng một lần, chi phí, thiếu tiền/thể lực, ăn/ngủ, vòng đời kiện hàng, hai lựa chọn, thời gian và kiểm tra trạng thái lưu.
 
-- Góc nhìn thứ nhất, di chuyển WASD/phím mũi tên, nhìn bằng chuột, line trace tương tác bằng E.
-- Ba chương, chín câu đố và hai kết thúc; SaveGame slot `VincentD`.
-- Sơ đồ biệt thự sáu khu có cửa thông nhau: sảnh, phòng khách, phòng ăn, thư viện, bếp và phòng ngủ. Geometry/collision được dựng bằng C++; cần kiểm tra trực tiếp trong Editor.
-- Vật liệu PBR (base color / normal / roughness), mesh có cạnh vát, ánh sáng cửa sổ và đèn nội thất.
-- Intro toàn màn hình: giới thiệu Unreal Engine → logo VINCENT D STUDIO → menu Vincent D → vào game. Nếu chưa có texture logo Unreal chính thức đã nhập vào dự án, dùng chữ “UNREAL ENGINE”, không vẽ lại hoặc sửa nhãn hiệu engine.
-- Gameplay toàn cửa sổ, không có trang giới thiệu hoặc bảng hướng dẫn bao quanh. Menu/radio là giao diện trong game.
+**Chưa chạy UnrealHeaderTool, biên dịch module bằng Unreal, thử Editor hoặc đóng gói Windows trong môi trường này.** Kiểm thử luật C++ không chứng minh phần UMG/Unreal đã build được. Chưa có `.exe` bản mới được kiểm chứng.
 
-Một số model công khai ở `SourceAssets/Models` và `SourceAssets/Lab` được giữ để tiếp tục nhập bằng Interchange của Unreal. Các model này đã được áp dụng trong bản thử trình duyệt, **chưa được xác nhận nhập/đặt tự động trong bản C++**. Native level vẫn dùng các cấu kiện C++ và mesh vát cạnh cho phần lớn nội thất. Không mô tả bản này là đã có chất lượng photoreal hoặc đã ngang một game simulator thương mại.
+Bản đồ hiện là bố cục thử gồm phòng và các điểm tương tác ở xóm, dựng bằng cấu kiện C++. Chưa đạt hình ảnh chân thực của ảnh tham chiếu. Hội thoại NPC hiện qua điểm tương tác, chưa có NPC hoạt ảnh/lịch sinh hoạt. Xe mới có tình huống sửa và trạng thái sẵn sàng, **chưa có lái xe/vật lý xe**; nhiệm vụ giao hàng hiện đi bộ. Lựa chọn thành phố lưu hướng đi và lời hẹn, chưa có bản đồ thành phố. Chưa có trang trí kéo/thả, kinh doanh đầy đủ, thời tiết hoặc đám đông giao thông.
 
-## Cài trên Windows
+Bộ mô hình từ ZIP `PhuQuocCity_3D_Source.zip` đã được loại khỏi dự án đang dùng theo yêu cầu; file gốc được giữ riêng trong workspace. Source không cần Python để chạy game.
 
-1. Cài Unreal Engine 5 qua Epic Games Launcher. Bản Target hiện cấu hình cho Unreal Engine 5.8 theo log build người dùng cung cấp; chưa xác minh chạy thực tế.
-2. Cài Visual Studio 2022 với **Game development with C++**, MSVC v143 và Windows SDK. Nếu engine yêu cầu toolset khác, cài đúng phiên bản được thông báo trong Visual Studio Installer, không tắt kiểm tra toolchain.
-3. Giải nén toàn bộ dự án vào đường dẫn ngắn, ví dụ `C:\Games\VincentD-Unreal`.
-4. Chuột phải `VincentD.uproject` → Switch Unreal Engine version → chọn engine. Generate Visual Studio project files.
-5. Mở solution, chọn **Development Editor / Win64**, build `VincentDEditor`. Nếu lỗi, đọc lỗi đầu tiên trong Output; source này chưa được biên dịch ở môi trường tạo file.
+## Mở trên máy Windows đang có UE 5.8
 
-Nguồn tải công cụ: https://www.unrealengine.com/download và https://visualstudio.microsoft.com/vs/ .
-
-## Chuẩn bị vật liệu/logo bằng C++
-
-Sau khi build Editor thành công và mở dự án:
-
-1. Mở **Output Log** trong Unreal Editor.
-2. Nhập lệnh:
-
-```text
-Vincent.PrepareAssets
-```
-
-Lệnh nhập 18 texture gốc từ `SourceAssets/Textures`, tạo sáu material trong `/Game/Vincent/Materials`, nhập `SM_BevelCube.obj` và hai PNG logo do Vincent D Studio sử dụng. Tài sản có sẵn được giữ nguyên, không ghi đè.
-
-3. Kiểm tra log có lỗi hay không rồi **Save All**. Material, mesh và logo cần xuất hiện trong Content Browser; lệnh in thông báo kết thúc không tự chứng minh mọi bước đã thành công.
-4. Nếu có PNG logo Unreal chính thức, đặt tại `SourceAssets/Branding/UnrealEngineLogo.png` trước khi chạy lệnh. File `.uasset` logo đóng gói từ game khác không được coi là PNG và không được tự sửa binary.
-5. Các GLB bổ sung có thể kéo từ `SourceAssets/Models` hoặc `SourceAssets/Lab` vào Content Browser bằng trình nhập Interchange của engine. Giữ attribution trong `THIRD-PARTY.md`. Việc gắn NPC/xe và vật liệu của các model đó vào gameplay Unreal còn cần thao tác nhập/cấu hình và kiểm thử, không được coi là đã hoàn tất chỉ vì có file nguồn.
-
-Texture đã được tạo và lưu sẵn. Không cần chạy Python để tái tạo hoặc chơi game. Mã sinh texture ban đầu chỉ giữ ở bản web như tài liệu nguồn tham khảo, ngoài dự án Unreal.
-
-## Chạy thử
-
-Chọn **Play → Standalone Game**. Kiểm tra intro/menu, di chuyển, cửa phòng, collision, đọc/nhập câu đố, đáp án sai, khóa điều kiện, cả ba chương, SaveGame, chơi lại và hai kết thúc. Escape trong Play In Editor có thể bị Editor dùng để dừng chơi; nên thử chế độ Standalone.
-
-Map mặc định `/Engine/Maps/Entry` dùng GameMode C++ để dựng thế giới. Nếu bản engine không cook map đó, tạo Empty Level, lưu `/Game/Maps/Main`, đổi GameDefaultMap, EditorStartupMap và MapsToCook, đồng thời đổi `-map` trong script build. Chưa kiểm tra phương án này trong Editor tại môi trường hiện tại.
-
-## Xuất Windows `.exe`
-
-Sau khi Editor build/chơi đạt và `Vincent.PrepareAssets` thành công, mở PowerShell tại thư mục dự án:
+1. Tải bản ZIP mới từ nhánh `vincent-cpp-source` và giải nén vào thư mục mới; giữ bản đang làm nếu có thay đổi riêng.
+2. Chuột phải `VincentD.uproject` → Show more options → Switch Unreal Engine version → 5.8.
+3. Mở `.uproject`, đồng ý build nếu được hỏi. Cần Visual Studio với workload Game development with C++ và Windows SDK. Log cũ của máy người dùng đã nhận Win64 SDK; lỗi V4/shared build environment đã được chỉnh trong Target.
+4. Nếu Visual Studio báo Unreal Engine Missing, mở trực tiếp bằng engine. Trong PowerShell tại thư mục dự án:
 
 ```powershell
-.\Build-Windows.ps1 -EngineRoot 'C:\Program Files\Epic Games\UE_5.8'
+.\Open-Unreal.ps1 -EngineRoot 'D:\FXServer\UE_5.8'
 ```
 
-Thay đường dẫn ví dụ bằng thư mục engine thực tế. Script kiểm tra material đã chuẩn bị, gọi Unreal Automation Tool để build/cook/stage/package/archive Win64 Shipping. Nếu PowerShell không cho chạy script, dùng Unreal Editor → Platforms → Windows → Package Project; không cần tắt bảo vệ toàn hệ thống.
+Đường dẫn trên lấy từ log người dùng, thay nếu engine đặt nơi khác. Có thể mở `D:\FXServer\UE_5.8\Engine\Binaries\Win64\UnrealEditor.exe`, rồi Browse tới `.uproject`. Nếu PowerShell chặn script, dùng cách mở Editor trực tiếp; không cần thay chính sách bảo vệ toàn máy.
 
-Kết quả dự kiến nằm trong `Packaged`. Kiểm tra `VincentD.exe` ở đó cùng toàn bộ dữ liệu đi kèm. Chưa có `.exe` nào được tạo trong môi trường này.
+5. Nếu cần build qua solution: Generate Visual Studio project files trên `.uproject`, mở `VincentD.sln`, chọn Development Editor / Win64 và build VincentDEditor. Không tạo Console App/Empty Project mới trong Visual Studio.
+6. Nếu lỗi tiếp, đọc `%LOCALAPPDATA%\UnrealBuildTool\Log.txt` và gửi đoạn error đầu tiên. Không đổi compiler hoặc bật override build environment khi chưa có log chỉ rõ lý do.
 
-Muốn cho người khác tải chơi: ZIP **toàn bộ thư mục đầu ra**, không chỉ `.exe`, rồi tải lên itch.io hoặc GitHub Releases. Người chơi không cần cài Unreal Engine. Link công khai chỉ tạo được sau khi có bản Windows đã build và thử thành công.
+## Chuẩn bị hình ảnh và chơi
 
-## Sửa lỗi shared build environment trên UE 5.8
+Sau khi Editor mở được, mở Output Log và chạy `Vincent.PrepareAssets`, kiểm tra lỗi rồi Save All. Công cụ Editor C++ nhập các texture PBR, mesh vát cạnh và logo studio, giữ nguyên tài sản có sẵn. Hình học fallback vẫn chạy về mặt thiết kế khi thiếu material, nhưng chất lượng không tương đương tài sản đã chuẩn bị.
 
-Log người dùng cho biết Win64 buildable và có Windows SDK 10.0.26100.0. Lỗi dừng hiện tại là Target dùng BuildSettings V4, khiến các warning setting khác mặc định UnrealEditor. Hai Target đã đổi sang BuildSettingsVersion.V7 và EngineIncludeOrderVersion.Unreal5_8 đúng theo log gợi ý. Không dùng bOverrideBuildEnvironment hoặc Unique để bỏ qua kiểm tra. Đồng thời sửa padding UMG qua UButtonSlot để tránh gọi API không tồn tại trên UButton.
+Play → Standalone Game. WASD/mũi tên để đi, chuột để nhìn, E để tương tác gần đồ vật, Escape để xem điện thoại/nhật ký. Điểm nhận việc và thông tin ở các bảng/quầy, chưa phải nhân vật cuối cùng. Đọc hộp thoại để biết dữ kiện trước khi xác nhận. Nút Tiếp tục đóng thoại; Bắt đầu lại yêu cầu xác nhận.
 
-Đóng Unreal/Visual Studio, cập nhật các file source mới, xóa thư mục generated `Binaries` và `Intermediate` **chỉ trong thư mục dự án** rồi mở lại `.uproject` để build. Giữ `Source`, `Content`, `Config` và `SourceAssets`. Nếu lỗi tiếp, gửi Log.txt mới trong `%LOCALAPPDATA%\UnrealBuildTool`. Đây mới là sửa nguyên nhân được xác nhận từ log; chưa xác nhận toàn bộ dự án biên dịch thành công.
+Đường kiểm tra: bàn trong phòng → Quán mẹ Hạnh (phục vụ 2 tô) → Tiệm chú Bảy (BINH DIEN, phí 50.000) → Nhà số 17 (D-03) → bến xe → chọn hướng đi. Có thể ăn, ngủ và mua cây bên ngoài luồng này; nhiệm vụ không trả thưởng lại khi đã hoàn thành.
+
+## Kiểm thử luật C++ không cần Unreal
+
+```sh
+g++ -std=c++17 -Wall -Wextra -Werror Tests/LifeProgressionTests.cpp -o life-tests
+./life-tests
+```
+
+Đây là kiểm thử logic; kiểm thử tích hợp trong Unreal vẫn bắt buộc trước khi gọi bản game chạy được.
+
+## Đóng gói Windows
+
+Sau khi build và chơi thử đạt:
+
+```powershell
+.\Build-Windows.ps1 -EngineRoot 'D:\FXServer\UE_5.8'
+```
+
+Script gọi Unreal Automation Tool cho Win64 Shipping và tìm VincentD.exe. Gửi toàn bộ thư mục kết quả (có dữ liệu/DLL), không chỉ riêng `.exe`. Người chơi không cần cài Unreal. Chưa có bản Windows mới được tạo trong phiên này.
+
+## Định hướng tiếp theo
+
+`Design/USER-VISION.md` giữ các yêu cầu chính; `Design/LIFE-VIET-DESIGN.md` có bốn hồi, hệ thống mục tiêu và hướng hình ảnh. Nội dung trong tài liệu định hướng chưa đồng nghĩa đã được triển khai. Model GLB công khai còn lại ở SourceAssets chỉ là tài nguyên tham khảo/để nhập tiếp, không tự động trở thành NPC hay xe đã điều khiển được. Xem THIRD-PARTY.md cho nguồn và giấy phép.

@@ -1,19 +1,9 @@
-# Hướng thiết kế mới và trạng thái triển khai
+# Trạng thái bản 0.2
 
-Ngày ghi nhận: 03/11/2026 (Asia/Saigon).
+Hướng chính: Duy 21 tuổi, từ xóm nhỏ lên thành phố hoặc ở lại phát triển quê.
 
-Người dùng chọn hướng game mô phỏng cuộc sống Việt Nam theo ảnh tham chiếu: phòng riêng tùy biến, xóm nhỏ, thành phố, việc làm, xe và các mối quan hệ.
+Đã thay gameplay C++ thoát phòng bằng luồng ngày đầu: phòng → ca sáng → sửa xe → giao hàng → lựa chọn hướng lập nghiệp. Có luật tiền, thể lực/mức no, thời gian, tin cậy, mua cây và save riêng.
 
-Tài liệu thiết kế mới: `LIFE-VIET-DESIGN.md`. Kịch bản thoát phòng trước đây không còn là định hướng nội dung chính được đề xuất.
+Đã chạy kiểm thử logic độc lập bằng g++; chưa build Unreal hoặc test tích hợp Windows. Hiện cảnh và đối tượng là bố cục thử, chưa đạt hình ảnh mục tiêu. Chưa có xe lái được, NPC hoạt ảnh/lịch sinh hoạt, thành phố, thời tiết, kinh doanh hoặc trang trí tự do.
 
-Trong lần cập nhật thiết kế này:
-
-- Đã viết tiền đề, nhân vật, bốn hồi truyện, ba hướng kết thúc, năm nhiệm vụ mở đầu và vòng lặp gameplay.
-- Đã ghi hướng hình ảnh, cảnh chuẩn để duyệt và phạm vi bản chơi đầu tiên.
-- Chưa thay thế gameplay C++ thoát phòng bằng các hệ thống life simulator.
-- Chưa tạo bản đồ xóm/thành phố trong Unreal, chưa biên dịch hay tạo bản `.exe` life simulator.
-- Chưa có ảnh gameplay Unreal đạt chất lượng ảnh tham chiếu.
-
-Source C++ hiện có và tài liệu thiết kế mới phải được phân biệt khi giới thiệu hoặc đóng gói cho người chơi.
-
-Theo yêu cầu người dùng, bộ mô hình sinh từ PhuQuocCity_3D_Source.zip đã được gỡ khỏi SourceAssets đang dùng. ZIP gốc và bản sinh chỉ được giữ bên ngoài dự án để bảo toàn dữ liệu; không dùng làm hình ảnh cuối.
+Bộ mô hình PhuQuocCity người dùng yêu cầu bỏ không được dùng trong dự án. Source thoát phòng trước đây được giữ riêng ngoài project để bảo toàn, không phải runtime của phiên bản mới.
